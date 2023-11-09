@@ -28,7 +28,7 @@ interface WebGatewayInterface
      *
      * @return PaylineResult
      */
-    public function initiateWebTransaction(WebTransaction $transaction);
+    public function initiateWebTransaction(WebTransaction $transaction): PaylineResult;
 
     /**
      * Checks if transaction identified by $paymentToken has been validated.
@@ -38,7 +38,7 @@ interface WebGatewayInterface
      *
      * @return PaylineResult
      */
-    public function verifyWebTransaction($paymentToken);
+    public function verifyWebTransaction($paymentToken): PaylineResult;
     
     /**
      * Process a refund by calling first "getWebPaymentDetails"
@@ -49,5 +49,5 @@ interface WebGatewayInterface
      * @param int $sequenceNumber
      * @return PaylineResult
      */
-    public function doRefund($paymentToken, $comment = '', $sequenceNumber = 0, $amount = null);
+    public function doRefund($paymentToken, $comment = '', $sequenceNumber = 0, $amount = null): PaylineResult;
 }

@@ -16,20 +16,17 @@ use Symfony\Contracts\EventDispatcher\Event;
 
 class ResultEvent extends Event
 {
-    /**
-     * @var PaylineResult
-     */
-    private $result;
 
-    public function __construct(PaylineResult $result)
+    public function __construct(
+        private PaylineResult $result
+    )
     {
-        $this->result = $result;
     }
 
     /**
      * @return PaylineResult
      */
-    public function getResult()
+    public function getResult(): PaylineResult
     {
         return $this->result;
     }

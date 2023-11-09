@@ -22,51 +22,26 @@ use Symfony\Component\HttpFoundation\Response;
 class PaylineController
 {
     /**
-     * @var EventDispatcherInterface
-     */
-    private $eventDispatcher;
-
-    /**
-     * @var WebGatewayInterface
-     */
-    private $payline;
-
-    /**
-     * Default confirmation URL the user will be redirected to after the payment.
-     * It is an absolute URL.
-     *
-     * @var string
-     */
-    private $defaultConfirmationUrl;
-
-    /**
-     * Default URL where the user will be redirected to if the payment was unsuccessful.
-     * It is an absolute URL.
-     *
-     * @var string
-     */
-    private $defaultErrorUrl;
-
-    /**
      * PaylineController constructor.
      * @param EventDispatcherInterface $eventDispatcher
      * @param WebGatewayInterface      $payline
      * @param string                   $defaultConfirmationUrl
      * @param string                   $defaultErrorUrl
      */
-    public function __construct(EventDispatcherInterface $eventDispatcher, WebGatewayInterface $payline, $defaultConfirmationUrl, $defaultErrorUrl)
+    public function __construct(
+        private EventDispatcherInterface $eventDispatcher,
+        private WebGatewayInterface $payline,
+        private string $defaultConfirmationUrl,
+        private string $defaultErrorUrl
+    )
     {
-        $this->eventDispatcher = $eventDispatcher;
-        $this->payline = $payline;
-        $this->defaultConfirmationUrl = $defaultConfirmationUrl;
-        $this->defaultErrorUrl = $defaultErrorUrl;
     }
 
     /**
      * @param Request $request
      * @return Response
      */
-    public function paymentNotificationAction(Request $request)
+    public function paymentNotificationAction(Request $request): Response
     {
         $result = $this->payline->verifyWebTransaction($request->get('paylinetoken', $request->get('token')));
         $this->eventDispatcher->dispatch(new PaymentNotificationEvent($result), PaylineEvents::ON_NOTIFICATION);
@@ -78,7 +53,7 @@ class PaylineController
      * @param Request $request
      * @return RedirectResponse|Response
      */
-    public function backToShopAction(Request $request)
+    public function backToShopAction(Request $request): RedirectResponse|Response
     {
         $result = $this->payline->verifyWebTransaction($request->get('paylinetoken', $request->get('token')));
         $event = new PaymentNotificationEvent($result);

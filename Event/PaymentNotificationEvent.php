@@ -17,25 +17,22 @@ use Symfony\Component\HttpFoundation\Response;
 
 class PaymentNotificationEvent extends Event
 {
-    /**
-     * @var PaylineResult
-     */
-    private $paylineResult;
 
     /**
      * @var Response
      */
-    private $response;
+    private Response $response;
 
-    public function __construct(PaylineResult $paylineResult)
+    public function __construct(
+        private PaylineResult $paylineResult
+    )
     {
-        $this->paylineResult = $paylineResult;
     }
 
     /**
      * @return PaylineResult
      */
-    public function getPaylineResult()
+    public function getPaylineResult(): PaylineResult
     {
         return $this->paylineResult;
     }
@@ -46,7 +43,7 @@ class PaymentNotificationEvent extends Event
      *
      * @return bool
      */
-    public function isPaymentSuccessful()
+    public function isPaymentSuccessful(): bool
     {
         return $this->paylineResult->isSuccessful();
     }
@@ -57,7 +54,7 @@ class PaymentNotificationEvent extends Event
      *
      * @return bool
      */
-    public function isPaymentCanceledByUser()
+    public function isPaymentCanceledByUser(): bool
     {
         return $this->paylineResult->isCanceled();
     }
@@ -68,7 +65,7 @@ class PaymentNotificationEvent extends Event
      *
      * @return bool
      */
-    public function isPaymentDuplicate()
+    public function isPaymentDuplicate(): bool
     {
         return $this->paylineResult->isDuplicate();
     }
@@ -76,7 +73,7 @@ class PaymentNotificationEvent extends Event
     /**
      * @return Response
      */
-    public function getResponse()
+    public function getResponse(): Response
     {
         return $this->response;
     }
@@ -84,7 +81,7 @@ class PaymentNotificationEvent extends Event
     /**
      * @param Response $response
      */
-    public function setResponse(Response $response)
+    public function setResponse(Response $response): void
     {
         $this->response = $response;
     }
@@ -92,7 +89,7 @@ class PaymentNotificationEvent extends Event
     /**
      * @return bool
      */
-    public function hasResponse()
+    public function hasResponse(): bool
     {
         return isset($this->response);
     }

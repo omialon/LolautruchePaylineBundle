@@ -12,6 +12,7 @@
 namespace Lolautruche\PaylineBundle\Payline;
 
 use Symfony\Component\PropertyAccess\PropertyAccess;
+use Symfony\Component\PropertyAccess\PropertyAccessor;
 
 /**
  * This class represents a result received from Payline API.
@@ -27,14 +28,14 @@ class PaylineResult
     const CODE_WALLET_NOT_SUPPORTED = '02511';
     const CODE_INTERNAL_ERROR = '02101';
 
-    private $code;
-    private $shortMessage;
-    private $longMessage;
+    private string $code;
+    private string $shortMessage;
+    private string $longMessage;
 
     /**
      * @var array
      */
-    private $resultHash;
+    private array $resultHash;
 
     /**
      * Hash of data specific to the shop, that was passed to the transaction.
@@ -43,12 +44,12 @@ class PaylineResult
      *
      * @var array
      */
-    private $privateData = [];
+    private array $privateData = [];
 
     /**
-     * @var \Symfony\Component\PropertyAccess\PropertyAccessor
+     * @var PropertyAccessor
      */
-    private $accessor;
+    private PropertyAccessor $accessor;
 
     public function __construct(array $resultHash)
     {
@@ -89,7 +90,7 @@ class PaylineResult
     /**
      * @return bool
      */
-    public function isSuccessful()
+    public function isSuccessful(): bool
     {
         return $this->code === static::CODE_TRANSACTION_APPROVED;
     }
@@ -97,7 +98,7 @@ class PaylineResult
     /**
      * @return bool
      */
-    public function isCanceled()
+    public function isCanceled(): bool
     {
         return $this->code === static::CODE_TRANSACTION_CANCELED;
     }
@@ -105,7 +106,7 @@ class PaylineResult
     /**
      * @return bool
      */
-    public function isDuplicate()
+    public function isDuplicate(): bool
     {
         return $this->code === static::CODE_TRANSACTION_DUPLICATE || (isset($this->resultHash['transaction']['isDuplicated']) && $this->resultHash['transaction']['isDuplicated']);
     }
@@ -113,7 +114,7 @@ class PaylineResult
     /**
      * @return string
      */
-    public function getCode()
+    public function getCode(): ?string
     {
         return $this->code;
     }
@@ -121,7 +122,7 @@ class PaylineResult
     /**
      * @return string
      */
-    public function getShortMessage()
+    public function getShortMessage(): ?string
     {
         return $this->shortMessage;
     }
@@ -129,7 +130,7 @@ class PaylineResult
     /**
      * @return string
      */
-    public function getLongMessage()
+    public function getLongMessage(): ?string
     {
         return $this->longMessage;
     }
@@ -139,7 +140,7 @@ class PaylineResult
      *
      * @return array
      */
-    public function getResultHash()
+    public function getResultHash(): array
     {
         return $this->resultHash;
     }
@@ -170,7 +171,7 @@ class PaylineResult
      *
      * @return mixed|null
      */
-    public function getItem($path)
+    public function getItem(string $path): mixed
     {
         // Property path doesn't contain array brackets, assume it is a direct access to an item.
         if (strpos($path, '[') === false && strpos($path, ']') === false) {
@@ -189,19 +190,19 @@ class PaylineResult
      * If no private data can be found for $key, will return $default.
      *
      * @param string $key
-     * @param mixed  $default The default value
+     * @param mixed|null $default The default value
      *
      * @return mixed
      */
-    public function getPrivateData($key, $default = null)
+    public function getPrivateData(string $key, mixed $default = null): mixed
     {
-        return isset($this->privateData[$key]) ? $this->privateData[$key] : $default;
+        return $this->privateData[$key] ?? $default;
     }
 
     /**
      * @return array
      */
-    public function allPrivateData()
+    public function allPrivateData(): array
     {
         return $this->privateData;
     }

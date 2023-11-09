@@ -22,67 +22,22 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  */
 class Payline implements WebGatewayInterface
 {
-    /**
-     * @var PaylineSDK
-     */
-    private $paylineSDK;
-
-    /**
-     * @var EventDispatcherInterface
-     */
-    private $eventDispatcher;
-
-    /**
-     * Default currency code.
-     *
-     * @var int
-     */
-    private $defaultCurrency;
-
-    /**
-     * @var string
-     */
-    private $defaultReturnUrl;
-
-    /**
-     * @var string
-     */
-    private $defaultCancelUrl;
-
-    /**
-     * @var string
-     */
-    private $defaultNotificationUrl;
-
-    /**
-     * Default contract number, reprenting payment mediums available.
-     *
-     * @var string
-     */
-    private $defaultContractNumber;
-
     public function __construct(
-        PaylineSDK $paylineSDK,
-        EventDispatcherInterface $eventDispatcher,
-        $defaultCurrency,
-        $defaultReturnUrl,
-        $defaultCancelUrl,
-        $defaultNotificationUrl,
-        $defaultContractNumber = null
+        private PaylineSDK $paylineSDK,
+        private EventDispatcherInterface $eventDispatcher,
+        private int $defaultCurrency,
+        private string $defaultReturnUrl,
+        private string $defaultCancelUrl,
+        private string $defaultNotificationUrl,
+        private ?string $defaultContractNumber = null
     ) {
-        $this->paylineSDK = $paylineSDK;
-        $this->eventDispatcher = $eventDispatcher;
-        $this->defaultCurrency = $defaultCurrency;
-        $this->defaultReturnUrl = $defaultReturnUrl;
-        $this->defaultCancelUrl = $defaultCancelUrl;
-        $this->defaultNotificationUrl = $defaultNotificationUrl;
         $this->defaultContractNumber = (string) $defaultContractNumber;
     }
 
     /**
      * @return PaylineSDK
      */
-    public function getPaylineSDK()
+    public function getPaylineSDK(): PaylineSDK
     {
         return $this->paylineSDK;
     }
@@ -90,7 +45,7 @@ class Payline implements WebGatewayInterface
     /**
      * {@inheritdoc}
      */
-    public function initiateWebTransaction(WebTransaction $transaction)
+    public function initiateWebTransaction(WebTransaction $transaction): PaylineResult
     {
         $this->eventDispatcher->dispatch(
             new WebTransactionEvent($transaction),
@@ -144,7 +99,7 @@ class Payline implements WebGatewayInterface
     /**
      * {@inheritdoc}
      */
-    public function verifyWebTransaction($paymentToken)
+    public function verifyWebTransaction($paymentToken): PaylineResult
     {
         $response = $this->paylineSDK->getWebPaymentDetails(['token' => $paymentToken]);
 
@@ -157,7 +112,7 @@ class Payline implements WebGatewayInterface
         return $paylineResult;
     }
     
-    public function doRefund($paymentToken, $comment = '', $sequenceNumber = 0, $amount = null)
+    public function doRefund($paymentToken, $comment = '', $sequenceNumber = 0, $amount = null): PaylineResult
     {
         // first, we get the payment details
         $paymentDetails = $this->paylineSDK->getWebPaymentDetails(['token' => $paymentToken]);

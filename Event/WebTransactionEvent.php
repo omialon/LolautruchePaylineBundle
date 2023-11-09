@@ -16,20 +16,16 @@ use Symfony\Contracts\EventDispatcher\Event;
 
 class WebTransactionEvent extends Event
 {
-    /**
-     * @var WebTransaction
-     */
-    private $transaction;
-
-    public function __construct(WebTransaction $transaction)
+    public function __construct(
+        private WebTransaction $transaction
+    )
     {
-        $this->transaction = $transaction;
     }
 
     /**
      * @return WebTransaction
      */
-    public function getTransaction()
+    public function getTransaction(): WebTransaction
     {
         return $this->transaction;
     }

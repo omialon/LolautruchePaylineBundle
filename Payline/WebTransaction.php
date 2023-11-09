@@ -13,6 +13,7 @@ namespace Lolautruche\PaylineBundle\Payline;
 
 use DateTimeInterface;
 use Symfony\Component\PropertyAccess\PropertyAccess;
+use Symfony\Component\PropertyAccess\PropertyAccessor;
 
 /**
  * Transaction class for web payments (i.e. doWebPayment requests).
@@ -38,7 +39,7 @@ class WebTransaction
      *
      * @var int
      */
-    private $amount;
+    private int $amount;
 
     /**
      * Currency code, if different than the default one.
@@ -46,14 +47,14 @@ class WebTransaction
      *
      * @var int
      */
-    private $currency;
+    private int $currency;
 
     /**
      * Payment action code.
      *
      * @var int
      */
-    private $action = self::PAYMENT_ACTION_AUTHORIZATION_CAPTURE;
+    private int $action = self::PAYMENT_ACTION_AUTHORIZATION_CAPTURE;
 
     /**
      * Payment mode.
@@ -61,7 +62,7 @@ class WebTransaction
      *
      * @var string
      */
-    private $mode = self::PAYMENT_MODE_CASH;
+    private string $mode = self::PAYMENT_MODE_CASH;
 
     /**
      * VAD contract number to use, if different than the default one.
@@ -69,7 +70,7 @@ class WebTransaction
      *
      * @var string
      */
-    private $contractNumber;
+    private string $contractNumber;
 
     /**
      * Reference to the order.
@@ -77,42 +78,42 @@ class WebTransaction
      *
      * @var mixed
      */
-    private $orderRef;
+    private mixed $orderRef;
 
     /**
      * Order amount in the smallest currency unit, if different than $amount.
      *
      * @var int
      */
-    private $orderAmount;
+    private int $orderAmount;
 
     /**
      * Currency code of the order, if different than $currency.
      *
      * @var int
      */
-    private $orderCurrency;
+    private int $orderCurrency;
 
     /**
      * Tax amount for the order, in the smallest currency unit.
      *
      * @var int
      */
-    private $orderTaxes;
+    private int $orderTaxes;
 
     /**
      * Country code (e.g. "FR").
      *
      * @var string
      */
-    private $orderCountry;
+    private string $orderCountry;
 
     /**
      * The order date.
      *
      * @var DateTimeInterface
      */
-    private $orderDate;
+    private DateTimeInterface $orderDate;
 
     /**
      * Extra options to add to the payment.
@@ -131,19 +132,19 @@ class WebTransaction
      *
      * @var array
      */
-    private $extraOptions = [];
+    private array $extraOptions = [];
 
     /**
      * Payline session token.
      *
      * @var string
      */
-    private $token;
+    private string $token;
 
     /**
-     * @var \Symfony\Component\PropertyAccess\PropertyAccessor
+     * @var PropertyAccessor
      */
-    private $accessor;
+    private PropertyAccessor $accessor;
 
     /**
      * Hash of data specific to the shop.
@@ -159,9 +160,9 @@ class WebTransaction
      *
      * @var array
      */
-    private $privateData = [];
+    private array $privateData = [];
 
-    public function __construct($amount, $orderRef, DateTimeInterface $orderDate)
+    public function __construct(int $amount, mixed $orderRef, DateTimeInterface $orderDate)
     {
         $this->amount = $amount;
         $this->orderRef = $orderRef;
@@ -172,7 +173,7 @@ class WebTransaction
     /**
      * @return int
      */
-    public function getAmount()
+    public function getAmount(): int
     {
         return $this->amount;
     }
@@ -182,7 +183,7 @@ class WebTransaction
      *
      * @return WebTransaction
      */
-    public function setAmount($amount)
+    public function setAmount(int $amount): self
     {
         $this->amount = $amount;
 
@@ -192,7 +193,7 @@ class WebTransaction
     /**
      * @return int
      */
-    public function getCurrency()
+    public function getCurrency(): int
     {
         return $this->currency;
     }
@@ -202,7 +203,7 @@ class WebTransaction
      *
      * @return WebTransaction
      */
-    public function setCurrency($currency)
+    public function setCurrency(int $currency): self
     {
         $this->currency = $currency;
 
@@ -212,7 +213,7 @@ class WebTransaction
     /**
      * @return int
      */
-    public function getAction()
+    public function getAction(): int
     {
         return $this->action;
     }
@@ -222,7 +223,7 @@ class WebTransaction
      *
      * @return WebTransaction
      */
-    public function setAction($action)
+    public function setAction(int $action): self
     {
         $this->action = $action;
 
@@ -232,7 +233,7 @@ class WebTransaction
     /**
      * @return string
      */
-    public function getMode()
+    public function getMode(): string
     {
         return $this->mode;
     }
@@ -242,7 +243,7 @@ class WebTransaction
      *
      * @return WebTransaction
      */
-    public function setMode($mode)
+    public function setMode(string $mode): self
     {
         $this->mode = $mode;
 
@@ -252,7 +253,7 @@ class WebTransaction
     /**
      * @return string
      */
-    public function getContractNumber()
+    public function getContractNumber(): string
     {
         return $this->contractNumber;
     }
@@ -262,7 +263,7 @@ class WebTransaction
      *
      * @return WebTransaction
      */
-    public function setContractNumber($contractNumber)
+    public function setContractNumber(string $contractNumber): self
     {
         $this->contractNumber = $contractNumber;
 
@@ -272,7 +273,7 @@ class WebTransaction
     /**
      * @return mixed
      */
-    public function getOrderRef()
+    public function getOrderRef(): mixed
     {
         return $this->orderRef;
     }
@@ -282,7 +283,7 @@ class WebTransaction
      *
      * @return WebTransaction
      */
-    public function setOrderRef($orderRef)
+    public function setOrderRef(mixed $orderRef): self
     {
         $this->orderRef = $orderRef;
 
@@ -292,7 +293,7 @@ class WebTransaction
     /**
      * @return int
      */
-    public function getOrderAmount()
+    public function getOrderAmount(): int
     {
         return $this->orderAmount;
     }
@@ -302,7 +303,7 @@ class WebTransaction
      *
      * @return WebTransaction
      */
-    public function setOrderAmount($orderAmount)
+    public function setOrderAmount(int $orderAmount): self
     {
         $this->orderAmount = $orderAmount;
 
@@ -312,7 +313,7 @@ class WebTransaction
     /**
      * @return int
      */
-    public function getOrderCurrency()
+    public function getOrderCurrency(): int
     {
         return $this->orderCurrency;
     }
@@ -322,7 +323,7 @@ class WebTransaction
      *
      * @return WebTransaction
      */
-    public function setOrderCurrency($orderCurrency)
+    public function setOrderCurrency(int $orderCurrency): self
     {
         $this->orderCurrency = $orderCurrency;
 
@@ -332,7 +333,7 @@ class WebTransaction
     /**
      * @return int
      */
-    public function getOrderTaxes()
+    public function getOrderTaxes(): int
     {
         return $this->orderTaxes;
     }
@@ -342,7 +343,7 @@ class WebTransaction
      *
      * @return WebTransaction
      */
-    public function setOrderTaxes($orderTaxes)
+    public function setOrderTaxes(int $orderTaxes): self
     {
         $this->orderTaxes = $orderTaxes;
 
@@ -352,7 +353,7 @@ class WebTransaction
     /**
      * @return string
      */
-    public function getOrderCountry()
+    public function getOrderCountry(): string
     {
         return $this->orderCountry;
     }
@@ -362,7 +363,7 @@ class WebTransaction
      *
      * @return WebTransaction
      */
-    public function setOrderCountry($orderCountry)
+    public function setOrderCountry(string $orderCountry): self
     {
         $this->orderCountry = $orderCountry;
 
@@ -372,7 +373,7 @@ class WebTransaction
     /**
      * @return DateTimeInterface
      */
-    public function getOrderDate()
+    public function getOrderDate(): DateTimeInterface
     {
         return $this->orderDate;
     }
@@ -382,7 +383,7 @@ class WebTransaction
      *
      * @return WebTransaction
      */
-    public function setOrderDate(DateTimeInterface $orderDate)
+    public function setOrderDate(DateTimeInterface $orderDate): self
     {
         $this->orderDate = $orderDate;
 
@@ -392,7 +393,7 @@ class WebTransaction
     /**
      * @return array
      */
-    public function getExtraOptions()
+    public function getExtraOptions(): array
     {
         return $this->extraOptions;
     }
@@ -402,7 +403,7 @@ class WebTransaction
      *
      * @return WebTransaction
      */
-    public function setExtraOptions(array $extraOptions)
+    public function setExtraOptions(array $extraOptions): self
     {
         $this->extraOptions = $extraOptions;
 
@@ -438,7 +439,7 @@ class WebTransaction
      *
      * @return WebTransaction
      */
-    public function addExtraOption($path, $value)
+    public function addExtraOption(string $path, mixed $value): self
     {
         // Property path doesn't contain array brackets, assume it is an assignment to a 1st level option.
         if (strpos($path, '[') === false && strpos($path, ']') === false) {
@@ -453,7 +454,7 @@ class WebTransaction
     /**
      * @return string
      */
-    public function getToken()
+    public function getToken(): string
     {
         return $this->token;
     }
@@ -461,7 +462,7 @@ class WebTransaction
     /**
      * @param string $token
      */
-    public function setToken($token)
+    public function setToken(string $token): void
     {
         $this->token = $token;
     }
@@ -469,7 +470,7 @@ class WebTransaction
     /**
      * @return array
      */
-    public function getPrivateData()
+    public function getPrivateData(): array
     {
         return $this->privateData;
     }
@@ -479,7 +480,7 @@ class WebTransaction
      *
      * @return $this
      */
-    public function setPrivateData(array $privateData)
+    public function setPrivateData(array $privateData): self
     {
         $this->privateData = $privateData;
 
@@ -494,7 +495,7 @@ class WebTransaction
      *
      * @return $this
      */
-    public function addPrivateData($key, $value)
+    public function addPrivateData(string $key, string $value): self
     {
         $this->privateData[$key] = $value;
 
